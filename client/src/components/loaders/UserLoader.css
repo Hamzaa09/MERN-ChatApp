@@ -1,0 +1,33 @@
+.pic::before,
+.heading::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to right, #353d46, #646b72d8, #353d46);
+  background-repeat: no-repeat;
+  animation: slider 2s ease-out infinite;
+}
+
+@keyframes slider {
+  from {
+    background-position: -100px;
+  }
+
+  to {
+    background-position: 200px;
+  }
+}
+
+.msgs::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  background-image: linear-gradient(to right, #353d46, #646b72d8, #353d46);
+  background-repeat: no-repeat;
+  animation: slider 2s ease-out infinite;
+}

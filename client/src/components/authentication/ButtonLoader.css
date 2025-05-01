@@ -1,0 +1,16 @@
+.loader {
+  border: 3px solid transparent;
+  border-radius: 50%;
+  border-right: 3px solid #D2E0EA;
+  border-top: 3px solid #D2E0EA;
+  animation: buttonLoader 1s infinite ease;
+}
+
+@keyframes buttonLoader {
+    from{
+        transform: rotate(0turn);
+    }
+    to {
+        transform: rotate(1turn);
+    }
+}
