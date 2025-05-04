@@ -5,7 +5,7 @@ import { loginUserThunk } from '../../store/slices/user.thunk'
 import toast, { Toaster } from "react-hot-toast";
 import { IoEyeSharp } from "react-icons/io5";
 import { FaRegEyeSlash } from "react-icons/fa";
-import ProgressBar from "@ramonak/react-progress-bar";
+import LinearProgress from '@mui/material/LinearProgress';
 import './ButtonLoader.css'
 
 
@@ -85,16 +85,10 @@ const Login = () => {
 
   return (
     <div className='flex justify-center items-center min-h-screen'>
-      {isprogress && <ProgressBar
-        completed={progress}
-        bgColor="#155DFC"
-        height="2px"
-        width='100vw'
-        isLabelVisible={false}
-        baseBgColor="#848E9B"
-        labelColor="#e80909"
-        maxCompleted={100}
-        className='absolute top-0 left-0'
+      {isprogress && <LinearProgress
+        value={progress}
+        variant='determinate'
+        sx={{ height: '2px', background: '#848E9B', color: '#155DFC', position: 'absolute', top: '0px', left: '0px', right: '0px' }}
       />}
 
       <Toaster />
