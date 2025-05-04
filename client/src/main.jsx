@@ -22,12 +22,6 @@ const router = createBrowserRouter(
     }
     ,
     {
-      path: "/loaders",
-      element:
-        <ChatsLoader/>
-    }
-    ,
-    {
       path: "/profileupdate",
       element:
         <ProfileUpdate />
