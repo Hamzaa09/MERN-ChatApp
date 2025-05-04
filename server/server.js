@@ -4,7 +4,7 @@ import userRouter from "./routes/user.routes.js";
 import messageRouter from "./routes/message.routes.js";
 import { connectDB } from "./db/connection.js";
 import cors from "cors";
-import {} from "./socket/socket.js"
+import {} from "./socket/socket.js";
 
 // middleware imports
 import { errorMiddleware } from "./middlewares/error.middleware.js";
@@ -20,10 +20,11 @@ app.use(cookieParser());
 app.use(
   cors({
     // origin: process.env.FRONTEND_URL,
-    origin: 'https://mern-chat-app-6azy.vercel.app',
+    origin: "https://mern-chat-app-6azy.vercel.app",
     credentials: true,
   })
 );
+app.options("*", cors());
 
 // db
 connectDB();
@@ -33,7 +34,6 @@ app.use(userRouter);
 app.use(messageRouter);
 
 app.use(errorMiddleware);
-
 
 server.listen(process.env.PORT, () => {
   console.log(`listening on http://localhost:${process.env.PORT}`);
