@@ -17,18 +17,12 @@ dotenv.config();
 // middlewares
 app.use(cookieParser());
 app.use(
-  cors({
-    origin: process.env.FRONTEND_URL,
-    // origin: "https://mern-chat-app-6azy.vercel.app",
-    credentials: true,
-  })
-);
-app.options(
-  "*",
-  cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
-  })
+  cors()
+  // {
+  //   origin: process.env.FRONTEND_URL,
+  //   // origin: "https://mern-chat-app-6azy.vercel.app",
+  //   credentials: true,
+  // }
 );
 app.use(express.json());
 
