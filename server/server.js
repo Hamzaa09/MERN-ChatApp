@@ -15,7 +15,6 @@ import { app, server } from "./socket/socket.js";
 dotenv.config();
 
 // middlewares
-app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
@@ -24,7 +23,14 @@ app.use(
     credentials: true,
   })
 );
-app.options("*", cors());
+app.options(
+  "*",
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
+app.use(express.json());
 
 // db
 connectDB();
