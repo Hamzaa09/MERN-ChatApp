@@ -16,19 +16,19 @@ const LandingPage = () => {
   }
 
   return (
-    <div className='parent w-[100vw] h-[100vh]  px-[5vw] select-none overflow-hidden'>
+    <div className='parent w-[100vw] h-[100vh]  px-[5vw] select-none overflow-auto lg:overflow-hidden'>
 
       {/* navigation bar */}
       <nav className='h-[10vh] flex items-center justify-between'>
         <h1 className='font-bold text-2xl tracking-wider'>Chat Up!</h1>
         <ul className='flex gap-5 text-lg'>
           <li className='font-semibold cursor-pointer p-2 hover:underline active:translate-y-[1px]'> <Link to={'/login'}> Login </Link> </li>
-          <li className='bg-blue-600 py-2 px-4 font-bold text-[#1D232A] rounded-4xl cursor-pointer active:translate-y-[1px]'><Link to={'/signup'}> Sign Up </Link></li>
+          <li className='bg-blue-600 content-center px-3 font-bold text-[#1D232A] rounded-4xl cursor-pointer active:translate-y-[1px]'><Link to={'/signup'}> Sign Up </Link></li>
         </ul>
       </nav>
 
       {/* hero section  */}
-      <main className='main w-[100%] h-[90vh] flex justify-center items-center'>
+      <main className='main w-[100%]  flex justify-center items-center'>
 
         <div className='div-one w-[60%] flex flex-col gap-12'>
 
