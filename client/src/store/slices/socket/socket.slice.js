@@ -12,8 +12,7 @@ export const socketSlice = createSlice({
   reducers: {
     initializeSocket: (state, action) => {
       const socket = io(
-        // import.meta.env.VITE_URL, {
-        "http://mern-chat-app-iota-opal.vercel.app", {
+        import.meta.env.VITE_URL, {
         query: {
           userId: action.payload,
         },
