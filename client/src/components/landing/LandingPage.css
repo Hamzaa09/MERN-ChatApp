@@ -34,7 +34,7 @@
   }
 }
 
-@media (max-width: 450px){
+@media (max-width: 600px){
   .div-two {
     width: 100%;
     margin: 7vh 5vw 0 5vw;
