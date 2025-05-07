@@ -21,7 +21,7 @@ const LandingPage = () => {
       {/* navigation bar */}
       <nav className='h-[10vh] flex items-center justify-between'>
         <h1 className='font-bold text-2xl tracking-wider'>Chat Up!</h1>
-        <ul className='flex gap-5 text-lg'>
+        <ul className='flex gap-3 md:gap-5 text-lg'>
           <li className='font-semibold cursor-pointer p-2 hover:underline active:translate-y-[1px]'> <Link to={'/login'}> Login </Link> </li>
           <li className='bg-blue-600 content-center px-3 font-bold text-[#1D232A] rounded-4xl cursor-pointer active:translate-y-[1px]'><Link to={'/signup'}> Sign Up </Link></li>
         </ul>
