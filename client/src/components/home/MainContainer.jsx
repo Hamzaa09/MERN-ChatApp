@@ -49,6 +49,36 @@ const MainContainer = ({ onBack }) => {
     return `${hrs}:${mins}`
   }
 
+  const getDate = (msg) => {
+    let msgDate = msg.split("T")[0];
+    let elseDate =
+      msg.split("T")[0].split("-")[2] + "-" + msg.split("T")[0].split("-")[1];
+    let currentDate = new Date();
+    let yesterdayDate = new Date();
+    yesterdayDate.setDate(currentDate.getDate() - 1);
+
+    let currentFormattedDate = setDateFormat(currentDate);
+    let yesterdayFormattedDate = setDateFormat(yesterdayDate);
+
+
+    if (msgDate === currentFormattedDate) {
+      return "Today";
+    } else if (msgDate === yesterdayFormattedDate) {
+      return "Yesterday";
+    } else {
+      return elseDate;
+    }
+  };
+
+  const setDateFormat = (date) => {
+    const day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate();
+    const month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : "0" + (date.getMonth() + 1);
+    const year = date.getFullYear();
+
+    const finalDate = year + "-" + month + "-" + day;
+
+    return finalDate;
+  };
 
   return (
     <>
@@ -74,7 +104,7 @@ const MainContainer = ({ onBack }) => {
 
 
           {/* conversation */}
-          <div className={`relative p-5 h-full ${msgLoading ? 'overflow-y-hidden' : 'overflow-y-auto'}`} onClick={()=> setEmoji(false)}>
+          <div className={`relative p-5 h-full ${msgLoading ? 'overflow-y-hidden' : 'overflow-y-auto'}`} onClick={() => setEmoji(false)}>
             {msgLoading ? <ChatsLoader /> : messages?.map((_, index) => (
               <div
                 ref={messageRef}
@@ -83,7 +113,8 @@ const MainContainer = ({ onBack }) => {
 
                 <div className="chat-bubble">{messages?.[index].message}</div>
                 <div className="chat-footer opacity-50">
-                  <time className="text-xs opacity-50">{timeConverter(messages?.[index].createdAt)}</time>
+                  <time className="text-xs opacity-50">
+                    {getDate(messages?.[index].createdAt) + ', ' + timeConverter(messages?.[index].createdAt)}</time>
                   {/* <p>Delivered</p> */}
                 </div>
               </div>
@@ -94,11 +125,11 @@ const MainContainer = ({ onBack }) => {
 
 
           {/* info send Controllers  */}
-          {emoji && <div className='absolute bottom-20 right-8 lg:right-20 md:right-10'><EmojiPicker onEmojiClick={(e)=> setMessage(message + e.emoji)} /></div> }
+          {emoji && <div className='absolute bottom-20 right-8 lg:right-20 md:right-10'><EmojiPicker onEmojiClick={(e) => setMessage(message + e.emoji)} /></div>}
           <div className='flex gap-[3%] items-center justify-between pt-2 mb-4 px-5'>
             <div className='input input-lg text-lg w-full ml-3'>
               <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type here" className="text-[18px]" />
-              <MdOutlineEmojiEmotions className='text-2xl text-[#D8E4EA] cursor-pointer' onClick={() => setEmoji(!emoji)}/> 
+              <MdOutlineEmojiEmotions className='text-2xl text-[#D8E4EA] cursor-pointer' onClick={() => setEmoji(!emoji)} />
             </div>
 
             <div className=''>
