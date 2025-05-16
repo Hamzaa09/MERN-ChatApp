@@ -28,7 +28,7 @@ const LandingPage = () => {
       </nav>
 
       {/* hero section  */}
-      <main className='main w-[100%]  flex justify-center items-center'>
+      <main className='main w-[100%] lg:h-[90%] flex justify-center items-center'>
 
         <div className='div-one w-[60%] flex flex-col gap-12'>
 

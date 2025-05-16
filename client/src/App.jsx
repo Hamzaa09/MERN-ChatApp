@@ -8,8 +8,10 @@ const App = () => {
   const { authCheck } = useSelector(state => state.userReducer)
 
   useEffect(() => {
-    dispatch(getUserThunk())
-    dispatch(getOtherUsersThunk())
+    if (authCheck) {
+      dispatch(getUserThunk())
+      dispatch(getOtherUsersThunk())
+    }
   }, [authCheck])
 
 
