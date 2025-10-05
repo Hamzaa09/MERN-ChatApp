@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 
-
 export const sendToken = (res, user, statusCode) => {
   // token generation
   const tokenData = {
@@ -12,7 +11,9 @@ export const sendToken = (res, user, statusCode) => {
   });
 
   const options = {
-    expires: new Date(Date.now() + process.env.JWT_EXPIRE_2*24*60*60*1000),
+    expires: new Date(
+      Date.now() + process.env.JWT_EXPIRE_2 * 24 * 60 * 60 * 1000
+    ),
     httpOnly: true,
     secure: false,
     sameSite: "lax",
