@@ -14,6 +14,9 @@ import { app, server } from "./socket/socket.js";
 // configs
 dotenv.config();
 
+// db
+connectDB();
+
 // middlewares
 app.use(cookieParser());
 app.use(
@@ -24,9 +27,6 @@ app.use(
 );
 app.use(express.json());
 app.use(errorMiddleware);
-
-// db
-connectDB();
 
 // Router
 app.use(userRouter);
