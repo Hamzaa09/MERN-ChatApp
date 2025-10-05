@@ -13,7 +13,6 @@ import { app, server } from "./socket/socket.js";
 
 // configs
 dotenv.config();
-
 // db
 connectDB();
 
@@ -21,7 +20,7 @@ connectDB();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.VITE_URL,
+    origin: process.env.FRONTEND_URL,
     credentials: true,
   })
 );
