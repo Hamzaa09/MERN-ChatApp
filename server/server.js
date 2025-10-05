@@ -32,7 +32,8 @@ connectDB();
 app.use(userRouter);
 app.use(messageRouter);
 
+// server.listen(process.env.PORT, () => {
+//   console.log(`listening on http://localhost:${process.env.PORT}`);
+// });
 
-server.listen(process.env.PORT, () => {
-  console.log(`listening on http://localhost:${process.env.PORT}`);
-});
+export default app;
