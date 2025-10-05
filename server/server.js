@@ -23,6 +23,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(errorMiddleware);
 
 // db
 connectDB();
@@ -31,7 +32,6 @@ connectDB();
 app.use(userRouter);
 app.use(messageRouter);
 
-app.use(errorMiddleware);
 
 server.listen(process.env.PORT, () => {
   console.log(`listening on http://localhost:${process.env.PORT}`);
