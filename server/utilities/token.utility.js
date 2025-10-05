@@ -6,8 +6,6 @@ export const sendToken = (res, user, statusCode) => {
     _id: user?._id,
   };
 
-  console.log(process.env.JWT_SECRET);
-
   const token = jwt.sign(tokenData, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
   });
