@@ -4,12 +4,14 @@ import userRouter from "./routes/user.routes.js";
 import messageRouter from "./routes/message.routes.js";
 import { connectDB } from "./db/connection.js";
 import cors from "cors";
-import {} from "./socket/socket.js";
 
 // middleware imports
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import cookieParser from "cookie-parser";
 import { app, server } from "./socket/socket.js";
+
+// PORT
+const PORT = process.env.PORT || 5000;
 
 // configs
 dotenv.config();
@@ -31,8 +33,8 @@ app.use(errorMiddleware);
 app.use(userRouter);
 app.use(messageRouter);
 
-server.listen(process.env.PORT, () => {
-  console.log(`listening on http://localhost:${process.env.PORT}`);
+server.listen(PORT, () => {
+  console.log(`listening on http://localhost:${PORT}`);
 });
 
 // export default app;
