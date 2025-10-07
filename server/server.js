@@ -15,6 +15,7 @@ const PORT = process.env.PORT || 5000;
 
 // configs
 dotenv.config();
+
 // db
 connectDB();
 
@@ -22,7 +23,10 @@ connectDB();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: [
+      process.env.FRONTEND_URL,
+      "https://mern-chat-app-client-six.vercel.app",
+    ],
     credentials: true,
   })
 );
