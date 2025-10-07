@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 
+const isProduction = process.env.NODE_ENV === "production";
+
 export const sendToken = (res, user, statusCode) => {
   // token generation
   const tokenData = {
@@ -15,8 +17,9 @@ export const sendToken = (res, user, statusCode) => {
       Date.now() + process.env.JWT_EXPIRE_2 * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
   };
 
   res.status(statusCode).cookie("token", token, options).json({
