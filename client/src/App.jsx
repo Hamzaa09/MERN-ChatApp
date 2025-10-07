@@ -1,24 +1,23 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { getOtherUsersThunk, getUserThunk } from './store/slices/user.thunk'
-
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getOtherUsersThunk, getUserThunk } from "./store/slices/user.thunk";
 
 const App = () => {
-  const dispatch = useDispatch()
-  const { authCheck } = useSelector(state => state.userReducer)
+  const dispatch = useDispatch();
+  const { authCheck } = useSelector((state) => state.userReducer);
+
+  useEffect(() => {
+    dispatch(getUserThunk());
+  }, []);
 
   useEffect(() => {
     if (authCheck) {
-      dispatch(getUserThunk())
-      dispatch(getOtherUsersThunk())
+      dispatch(getUserThunk());
+      dispatch(getOtherUsersThunk());
     }
-  }, [authCheck])
+  }, [authCheck]);
 
+  return <></>;
+};
 
-  return (
-    <>
-    </>
-  )
-}
-
-export default App
+export default App;
