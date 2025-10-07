@@ -23,10 +23,7 @@ connectDB();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [
-      process.env.FRONTEND_URL,
-      "https://mern-chat-app-client-six.vercel.app",
-    ],
+    origin: process.env.FRONTEND_URL,
     credentials: true,
   })
 );
