@@ -1,10 +1,21 @@
-import express from 'express'
-import { authCheck } from '../middlewares/auth.middleware.js'
-import { getMessages, sendMessage } from '../controller/message.controller.js'
- 
-const router = express()
+import express from "express";
+import { authCheck } from "../middlewares/auth.middleware.js";
+import {
+  getMessages,
+  sendImages,
+  sendMessage,
+} from "../controller/message.controller.js";
+import { upload } from "../middlewares/multer.middleware.js";
 
-router.post('/sendMsg/:receiverId', authCheck, sendMessage)
-router.get('/getMsg/:receiverId', authCheck, getMessages)
+const router = express();
 
-export default router
+router.post(
+  "/sendImg/:receiverId",
+  upload.array("images", 10),
+  authCheck,
+  sendImages
+);
+router.post("/sendMsg/:receiverId", authCheck, sendMessage);
+router.get("/getMsg/:receiverId", authCheck, getMessages);
+
+export default router;

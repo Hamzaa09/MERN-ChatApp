@@ -29,6 +29,7 @@ app.use(
 );
 app.use(express.json());
 app.use(errorMiddleware);
+app.use(express.urlencoded({extended: true}))
 
 // Router
 app.use(userRouter);
