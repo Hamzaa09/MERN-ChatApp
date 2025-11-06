@@ -17,6 +17,12 @@ const msgSchema = new mongoose.Schema(
       type: String,
     },
     images: [String],
+    status: {
+      type: String,
+      enum: ["sent", "delivered", "seen"],
+      default: "sent",
+      required: true,
+    },
   },
   { timestamps: true }
 );

@@ -10,8 +10,9 @@ import { IoIosArrowBack } from "react-icons/io";
 import ChatsLoader from "../loaders/ChatsLoader";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
 import EmojiPicker from "emoji-picker-react";
-import { LuImagePlus } from "react-icons/lu";
+import { LuCheckCheck, LuImagePlus } from "react-icons/lu";
 import { ImagePage } from "./ImagePage";
+import { LuCheck } from "react-icons/lu";
 
 const MainContainer = ({ onBack }) => {
   const { selectedUserState, userProfile } = useSelector(
@@ -130,7 +131,7 @@ const MainContainer = ({ onBack }) => {
 
   const handleImageShow = (images) => {
     setShow(true);
-    setImages(images)
+    setImages(images);
   };
   return (
     <>
@@ -207,13 +208,31 @@ const MainContainer = ({ onBack }) => {
                     ) : (
                       <div className="chat-bubble">{msg.message}</div>
                     )}
-                    <div className="chat-footer opacity-50">
+                    <div
+                      className={
+                        userProfile?._id === messages?.[index].senderId
+                          ? "chat-footer opacity-50 flex"
+                          : "chat-footer opacity-50 flex flex-row-reverse"
+                      }
+                    >
                       <time className="text-xs opacity-50">
                         {getDate(messages?.[index].createdAt) +
                           ", " +
                           timeConverter(messages?.[index].createdAt)}
                       </time>
-                      {/* <p>Delivered</p> */}
+
+                      <div>
+                        {/* <p className="flex justify-center items-center text-lg">
+                          {msg.status == "sent" && <LuCheck />}
+                        </p>
+                        <p className="flex justify-center items-center text-lg">
+                          {msg.status == "delivered" && <LuCheckCheck />}
+                        </p>
+                        <p className="flex justify-center items-center text-lg text-blue-400">
+                          {msg.status == "seen" && <LuCheckCheck />}
+                        </p> */}
+                        <p>{msg.status && msg.status}</p>
+                      </div>
                     </div>
                   </div>
                 ))

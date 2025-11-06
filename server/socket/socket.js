@@ -4,6 +4,7 @@ import http, { createServer } from "http";
 import { Server } from "socket.io";
 import { resourceLimits } from "worker_threads";
 import dotenv from "dotenv";
+import messageModel from "../models/message.model.js";
 
 const app = express();
 dotenv.config();
@@ -25,6 +26,28 @@ io.on("connection", (socket) => {
     userSocketMap[userId] = socket.id;
 
     io.emit("onlineUsers", Object.keys(userSocketMap));
+
+    socket.on("msgDelivered", async (msgID) => {
+      try {
+        //update the msg
+        const msg = await messageModel.findByIdAndUpdate(
+          msgID,
+          {
+            status: "delivered",
+          },
+          { new: true }
+        );
+
+        //send new event to the sender to get new status
+        const senderSocketID = getSocketId(msg.senderId.toString());
+        io.to(senderSocketID).emit("msgUpdate", {
+          msgID,
+          status: "delivered",
+        });
+      } catch (err) {
+        console.log("error from socket.js", err);
+      }
+    });
 
     socket.on("disconnect", () => {
       delete userSocketMap[userId];
