@@ -189,7 +189,7 @@ const MainContainer = ({ onBack }) => {
                         : "chat chat-start"
                     }
                   >
-                    {msg.images.length > 0 ? (
+                    {msg.images.length > 0 && (
                       <div
                         onClick={() => handleImageShow(msg.images)}
                         className="relative chat-bubble  hover:cursor-pointer"
@@ -205,35 +205,44 @@ const MainContainer = ({ onBack }) => {
                           alt="img"
                         />
                       </div>
-                    ) : (
-                      <div className="chat-bubble">{msg.message}</div>
                     )}
-                    <div
-                      className={
-                        userProfile?._id === messages?.[index].senderId
-                          ? "chat-footer opacity-50 flex"
-                          : "chat-footer opacity-50 flex flex-row-reverse"
-                      }
-                    >
-                      <time className="text-xs opacity-50">
-                        {getDate(messages?.[index].createdAt) +
-                          ", " +
-                          timeConverter(messages?.[index].createdAt)}
-                      </time>
 
-                      <div>
-                        {/* <p className="flex justify-center items-center text-lg">
-                          {msg.status == "sent" && <LuCheck />}
-                        </p>
-                        <p className="flex justify-center items-center text-lg">
-                          {msg.status == "delivered" && <LuCheckCheck />}
-                        </p>
-                        <p className="flex justify-center items-center text-lg text-blue-400">
-                          {msg.status == "seen" && <LuCheckCheck />}
-                        </p> */}
-                        <p>{msg.status && msg.status}</p>
-                      </div>
-                    </div>
+                    {/* kisi aur user k pass live chat me msg jane se rokne ka code */}
+                    {((msg.senderId === userProfile._id &&
+                      msg.receiverId === selectedUserState._id) ||
+                      (msg.senderId === selectedUserState._id &&
+                        msg.receiverId === userProfile._id)) == true && (
+                      <>
+                        <div className="chat-bubble">{msg.message}</div>
+
+                        <div
+                          className={
+                            userProfile?._id === messages?.[index].senderId
+                              ? "chat-footer opacity-50 flex"
+                              : "chat-footer opacity-50 flex flex-row-reverse"
+                          }
+                        >
+                          <time className="text-xs opacity-50">
+                            {getDate(messages?.[index].createdAt) +
+                              ", " +
+                              timeConverter(messages?.[index].createdAt)}
+                          </time>
+
+                          <div>
+                            <p className="flex justify-center items-center text-lg">
+                              {msg.status == "sent" && <LuCheck />}
+                            </p>
+                            <p className="flex justify-center items-center text-lg">
+                              {msg.status == "delivered" && <LuCheckCheck />}
+                            </p>
+                            <p className="flex justify-center items-center text-lg text-blue-400">
+                              {msg.status == "seen" && <LuCheckCheck />}
+                            </p>
+                            {/* <p>{msg.status && msg.status}</p> */}
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 ))
               )}

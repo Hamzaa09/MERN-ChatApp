@@ -22,6 +22,7 @@ const userSocketMap = {};
 
 io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
+
   if (userId) {
     userSocketMap[userId] = socket.id;
 
@@ -44,8 +45,42 @@ io.on("connection", (socket) => {
           msgID,
           status: "delivered",
         });
+        const receiverSocketId = getSocketId(msg.receiverId.toString());
+        io.to(receiverSocketId).emit("msgUpdate", {
+          msgID,
+          status: "delivered",
+        });
       } catch (err) {
         console.log("error from socket.js", err);
+      }
+    });
+
+    socket.on("msgIsReceived", async ({ senderId, receiverId }) => {
+      try {
+        //update the msg
+        const msgs = await messageModel.find(
+          { senderId, receiverId, status: { $ne: "seen" } },
+          "_id"
+        );
+
+        await messageModel.updateMany(
+          { senderId, receiverId },
+          {
+            status: "seen",
+          }
+        );
+
+        //send new event to the sender to get new status
+        const senderSocketID = getSocketId(senderId);
+        io.to(senderSocketID).emit("setSeen", {
+          newMessages: msgs.map((msg) => msg._id),
+        });
+        const receiverSocketId = getSocketId(receiverId);
+        io.to(receiverSocketId).emit("setSeen", {
+          newMessages: msgs.map((msg) => msg._id),
+        });
+      } catch (err) {
+        console.log(err);
       }
     });
 

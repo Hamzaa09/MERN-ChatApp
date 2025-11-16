@@ -9,11 +9,14 @@ import {
 import {
   setNewMessage,
   setNewStatus,
+  setStatusToSeen,
 } from "../../store/slices/message/message.slice";
 import { Toaster } from "react-hot-toast";
 
 const Home = () => {
-  const { authCheck, userProfile } = useSelector((state) => state.userReducer);
+  const { authCheck, userProfile, selectedUserState } = useSelector(
+    (state) => state.userReducer
+  );
   const { socket } = useSelector((state) => state.socketReducer);
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
@@ -31,18 +34,37 @@ const Home = () => {
 
     socket.on("newMessage", (newMessage) => {
       dispatch(setNewMessage(newMessage));
-      socket.emit("msgDelivered", newMessage._id);
+
+      if (
+        selectedUserState &&
+        (newMessage.receiverId === selectedUserState._id ||
+          newMessage.senderId === selectedUserState._id)
+      ) {
+        socket.emit("msgIsReceived", {
+          senderId: selectedUserState._id,
+          receiverId: userProfile._id,
+        });
+      } else {
+        socket.emit("msgDelivered", newMessage._id);
+      }
     });
 
     socket.on("msgUpdate", ({ msgID, status }) => {
       dispatch(setNewStatus({ msgID, status }));
     });
+
+    socket.on("setSeen", ({ newMessages }) => {
+      dispatch(setStatusToSeen({ newMessages }));
+    });
+
     return () => {
       socket.off("onlineUsers");
       socket.off("newMessage");
+      socket.off("msgIsReceived");
       socket.off("msgUpdate");
+      socket.off("setSeen");
     };
-  }, [socket]);
+  }, [socket, selectedUserState]);
 
   return (
     <>
