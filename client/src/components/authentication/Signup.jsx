@@ -53,7 +53,7 @@ const Signup = () => {
     const response = await dispatch(signupUserThunk(signupData))
     setProgress(80)
 
-    if (response?.payload) {
+    if (response?.payload?.success) {
 
       setTimeout(() => {
         navigate('/chats')
