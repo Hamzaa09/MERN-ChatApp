@@ -15,8 +15,10 @@ const Sidebar = ({ onclick }) => {
   );
 
   const handleLogout = async () => {
-    await dispatch(logoutUserThunk());
-    toast.success("Logout Successfull!");
+    const res = await dispatch(logoutUserThunk());
+
+    if (res.payload.success) toast.success("Logout Successfull!");
+    else toast.error("Error Occured!");
   };
 
   // search
@@ -66,11 +68,7 @@ const Sidebar = ({ onclick }) => {
           <DataLoader />
         ) : (
           user?.map((oneUser) => (
-            <User
-              key={oneUser._id}
-              oneUser={oneUser}
-              onclick={onclick}
-            />
+            <User key={oneUser._id} oneUser={oneUser} onclick={onclick} />
           ))
         )}
       </div>
