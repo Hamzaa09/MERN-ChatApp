@@ -93,9 +93,16 @@ export const sendImages = asyncHandler(async (req, res, next) => {
     await conversation.save();
   }
 
-  const socketId = getSocketId(receiverId);
-  io.to(socketId).emit("newMessage", newMessage);
+  const receiverSocketId = getSocketId(receiverId);
+  const senderSocketId = getSocketId(senderId);
 
+  if (senderSocketId) {
+    io.to(senderSocketId).emit("newMessage", newMessage);
+  }
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("newMessage", newMessage);
+  }
+  
   res.status(200).json({
     success: true,
     response: {
