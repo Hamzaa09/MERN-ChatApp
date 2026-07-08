@@ -1,4 +1,4 @@
-# MERN Chat App
+# Chat Up! - Real-Time Messaging App 
 
 A full-stack real-time chat application with authentication, live presence, and rich messaging, built on the MERN stack with Socket.IO powering everything that needs to update instantly.
 
