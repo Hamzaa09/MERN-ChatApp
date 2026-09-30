@@ -7,7 +7,6 @@ import { sendToken } from "../utilities/token.utility.js";
 // singup
 export const register = asyncHandler(async (req, res, next) => {
   const { fullName, username, password, confirmPassword } = req.body;
-  // console.log(fullName.split(" ")[0],"+", fullName.split(" ")[1])
 
   const avatar = `https://ui-avatars.com/api/?name=${
     fullName.split(" ")[0] + "+" + fullName.split(" ")[1]
@@ -19,7 +18,7 @@ export const register = asyncHandler(async (req, res, next) => {
 
   const user = await userModel.findOne({ username });
   if (user) {
-    return next(new errorHandler("User exists!", 400));
+    return next(new errorHandler("User exists!", 409));
   }
 
   if (password !== confirmPassword) {
@@ -38,7 +37,7 @@ export const register = asyncHandler(async (req, res, next) => {
     avatar,
   });
 
-  sendToken(res, newUser, 200);
+  sendToken(res, newUser, 201);
 });
 
 // login
@@ -47,22 +46,23 @@ export const login = asyncHandler(async (req, res, next) => {
 
   if (!username || !password) {
     return next(
-      new errorHandler("Please enter a valid Username or Password!", 400)
+      new errorHandler("Please enter a valid Username or Password!", 422),
     );
   }
 
   const user = await userModel.findOne({ username });
   if (!user) {
     return next(
-      new errorHandler("Please enter a valid Username or Password!", 400)
+      new errorHandler("Please enter a valid Username or Password!", 404),
     );
   }
 
   // password decryption
   const decryptedPass = await bcrypt.compare(password, user.password);
+
   if (!decryptedPass) {
     return next(
-      new errorHandler("Please enter a valid Username or Password!", 400)
+      new errorHandler("Please enter a valid Username or Password!", 422),
     );
   }
 
@@ -73,13 +73,17 @@ export const login = asyncHandler(async (req, res, next) => {
 export const userUpdate = asyncHandler(async (req, res, next) => {
   const { id } = req.body;
 
-  const User = await userModel.findById(id);
+  const user = await userModel.findById(id);
 
-  if (!User) {
-    return;
+  if (!user) {
+    return next(
+      new errorHandler("Please enter a valid Username or Password!", 404),
+    );
   }
 
-  const editedUser = await userModel.findByIdAndUpdate(id, req.body, {new: true})
+  const editedUser = await userModel.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
 
   res.status(200).json({
     success: true,
@@ -91,14 +95,21 @@ export const userUpdate = asyncHandler(async (req, res, next) => {
 export const getProfile = asyncHandler(async (req, res, next) => {
   const userId = req.user._id;
 
-  const fetchedUser = await userModel.findById(userId);
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+    return next(
+      new errorHandler("User doesn't exist!", 404),
+    );
+  }
 
   res.status(200).json({
     success: true,
-    response: fetchedUser,
+    response: user,
   });
 });
 
+// logout
 export const logout = asyncHandler(async (req, res, next) => {
   res
     .status(200)
@@ -111,8 +122,20 @@ export const logout = asyncHandler(async (req, res, next) => {
     });
 });
 
+// user contacts
 export const otherUsers = asyncHandler(async (req, res, next) => {
-  const otherUser = await userModel.find({ _id: { $ne: req.user._id } });
+
+  const userId = req.user._id;
+
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+    return next(
+      new errorHandler("User doesn't exist!", 404),
+    );
+  }
+
+  const otherUser = await userModel.find({ _id: { $ne: userId } });
 
   res.status(200).json({
     success: true,
