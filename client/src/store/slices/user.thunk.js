@@ -2,11 +2,13 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import { axoisInstance } from "../../frontendUtillities/axios.instance";
 
+base = '/api/v1/user'
+
 export const loginUserThunk = createAsyncThunk(
-  "/login",
+  "user/login",
   async ({ username, password }, { rejectWithValue }) => {
     try {
-      const request = await axoisInstance.post("/login", {
+      const request = await axoisInstance.post(`${base}/login`, {
         username,
         password,
       });
@@ -20,13 +22,13 @@ export const loginUserThunk = createAsyncThunk(
 );
 
 export const signupUserThunk = createAsyncThunk(
-  "/signup",
+  "user/signup",
   async (
     { fullName, username, password, confirmPassword },
     { rejectWithValue }
   ) => {
     try {
-      const request = await axoisInstance.post("/signup", {
+      const request = await axoisInstance.post(`${base}/signup`, {
         fullName,
         username,
         password,
@@ -43,10 +45,10 @@ export const signupUserThunk = createAsyncThunk(
 );
 
 export const updateUserThunk = createAsyncThunk(
-  `/profileupdate`,
+  `user/profileupdate`,
   async ({ id, fullName, username }, { rejectWithValue }) => {
     try {
-      const request = await axoisInstance.patch(`/profileupdate`, {
+      const request = await axoisInstance.patch(`${base}/profileupdate`, {
         id,
         fullName,
         username,
@@ -62,10 +64,10 @@ export const updateUserThunk = createAsyncThunk(
 );
 
 export const logoutUserThunk = createAsyncThunk(
-  "/logout",
+  "user/logout",
   async (_, { rejectWithValue }) => {
     try {
-      const request = await axoisInstance.post("/logout");
+      const request = await axoisInstance.post(`${base}/logout`);
       return request.data;
     } catch (error) {
       const errorOutput = error?.response?.data?.errMessage;
@@ -76,10 +78,10 @@ export const logoutUserThunk = createAsyncThunk(
 );
 
 export const getUserThunk = createAsyncThunk(
-  "/getProfile",
+  "user/getProfile",
   async (_, { rejectWithValue }) => {
     try {
-      const request = await axoisInstance.get("/getProfile");
+      const request = await axoisInstance.get(`${base}/getProfile`);
       return request.data;
     } catch (error) {
       const errorOutput = error?.response?.data?.errMessage;
@@ -89,10 +91,10 @@ export const getUserThunk = createAsyncThunk(
 );
 
 export const getOtherUsersThunk = createAsyncThunk(
-  "/getOthers",
+  "user/getOthers",
   async (_, { rejectWithValue }) => {
     try {
-      const request = await axoisInstance.get("/getOthers");
+      const request = await axoisInstance.get(`${base}/getOthers`);
       return request.data;
     } catch (error) {
       const errorOutput = error?.response?.data?.errMessage;
