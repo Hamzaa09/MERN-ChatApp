@@ -4,14 +4,29 @@ import { errorHandler } from "../utilities/errorHandler.utility.js";
 import { asyncHandler } from "../utilities/asyncHandler.utility.js";
 import { getSocketId, io } from "../socket/socket.js";
 import { uploadToCloudinary } from "../utilities/cloudinary.utility.js";
+import mongoose from "mongoose";
+import userModel from "../models/user.model.js";
 
 export const sendMessage = asyncHandler(async (req, res, next) => {
   const senderId = req.user._id;
   const receiverId = req.params.receiverId;
   const message = req.body.message;
 
-  if (!senderId || !receiverId || !message) {
-    return next(new errorHandler("All fields required!", 400));
+  if (!message) {
+    return next(new errorHandler("Message can't be empty!", 422));
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(receiverId)) {
+    return next(new errorHandler("Invalid receiver ID format!", 400));
+  }
+
+  if (senderId.toString() === receiverId) {
+    return next(new errorHandler("You can't chat with yourself!", 400));
+  }
+
+  const receiverExists = await userModel.exists({ _id: receiverId });
+  if (!receiverExists) {
+    return next(new errorHandler("Recipient not found!", 400));
   }
 
   let conversation = await conversationModel.findOne({
@@ -45,7 +60,7 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
     io.to(receiverSocketId).emit("newMessage", newMessage);
   }
 
-  res.status(200).json({
+  res.status(201).json({
     success: true,
     response: {
       newMessage,
@@ -57,8 +72,21 @@ export const sendImages = asyncHandler(async (req, res, next) => {
   const senderId = req.user._id;
   const receiverId = req.params.receiverId;
 
-  if (!senderId || !receiverId || !req.files) {
-    return next(new errorHandler("All fields required!", 400));
+  if (!req.files || req.files.length === 0) {
+    return next(new errorHandler("No image found!", 400));
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(receiverId)) {
+    return next(new errorHandler("Invalid receiver ID format!", 400));
+  }
+
+  if (senderId.toString() === receiverId) {
+    return next(new errorHandler("You can't chat with yourself!", 400));
+  }
+
+  const receiverExists = await userModel.exists({ _id: receiverId });
+  if (!receiverExists) {
+    return next(new errorHandler("Recipient not found!", 400));
   }
 
   let conversation = await conversationModel.findOne({
@@ -72,15 +100,17 @@ export const sendImages = asyncHandler(async (req, res, next) => {
   }
 
   let imagesUrl = [];
-  if (req.files && req.files.length > 0) {
-    const updatedResults = await Promise.all(
-      req.files.map((file) => uploadToCloudinary(file.buffer))
-    );
+  const updatedResults = await Promise.all(
+    req.files.map((file) => uploadToCloudinary(file.buffer)),
+  );
 
-    imagesUrl = updatedResults
-      .filter((r) => r && r.secure_url)
-      .map((r) => r.secure_url);
+  if (imagesUrl.length === 0) {
+    return next(new errorHandler("Image upload failed!", 500));
   }
+
+  imagesUrl = updatedResults
+    .filter((r) => r && r.secure_url)
+    .map((r) => r.secure_url);
 
   const newMessage = await messageModel.create({
     senderId,
@@ -102,8 +132,8 @@ export const sendImages = asyncHandler(async (req, res, next) => {
   if (receiverSocketId) {
     io.to(receiverSocketId).emit("newMessage", newMessage);
   }
-  
-  res.status(200).json({
+
+  res.status(201).json({
     success: true,
     response: {
       newMessage,
@@ -115,8 +145,12 @@ export const getMessages = asyncHandler(async (req, res, next) => {
   const senderId = req.user._id;
   const receiverId = req.params.receiverId;
 
-  if (!senderId || !receiverId) {
-    return next(new errorHandler("All fields required!", 400));
+  if (!mongoose.Types.ObjectId.isValid(receiverId)) {
+    return next(new errorHandler("Invalid receiver ID format!", 400));
+  }
+
+  if (senderId.toString() === receiverId) {
+    return next(new errorHandler("You can't chat with yourself!", 400));
   }
 
   let conversation = await conversationModel
