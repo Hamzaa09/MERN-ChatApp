@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import toast, { Toaster } from "react-hot-toast";
 import { axoisInstance } from "../../../frontendUtillities/axios.instance";
 
-base = '/api/v1/message'
+const base = '/api/v1/message'
 
 export const sendImgThunk = createAsyncThunk(
   "message/sendImg",
